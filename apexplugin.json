@@ -1,0 +1,58 @@
+{
+    "name": "Backup APEX App to GitHub",
+    "version": "1.0.0",
+    "description": "An Oracle APEX Process Type plugin that exports an APEX application as a SQL file and uploads it to a GitHub repository via the GitHub REST API. Supports configurable branches, file paths, private repositories, chunked Base64 encoding for large applications, and detailed error reporting.",
+    "keywords": [
+        "backup",
+        "export",
+        "github",
+        "version control",
+        "devops",
+        "ci/cd",
+        "process",
+        "plugin",
+        "oracle",
+        "apex",
+        "plsql",
+        "rest api",
+        "automation"
+    ],
+    "homepage": "https://github.com/eng-malek/apex-backup-app-to-github-process-plugin",
+    "bugs": {
+        "url": "https://github.com/eng-malek/apex-backup-app-to-github-process-plugin/issues",
+        "email": "malek.m.edresi@gmail.com"
+    },
+    "license": "Apache-2.0",
+    "commercial": "No",
+    "author": {
+        "name": "Malek Mohammed Al-Edresi",
+        "email": "malek.m.edresi@gmail.com",
+        "url": "https://github.com/eng-malek",
+        "donationUrl": "https://buymeacoffee.com/malek_al_edresi"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/eng-malek/apex-backup-app-to-github-process-plugin.git"
+    },
+    "oracle": {
+        "versions": [
+            "19.0.0",
+            "21.0.0",
+            "23.0.0"
+        ],
+        "apex": {
+            "versions": [
+                "24.1.0",
+                "24.2.0",
+                "25.1.0",
+                "26.1.0"
+            ],
+            "plugin": {
+                "internalName": "BACKUP_APEX_APP_TO_GITHUB",
+                "type": "process",
+                "demo": "",
+                "previewImage": "https://raw.githubusercontent.com/eng-malek/apex-backup-app-to-github-process-plugin/main/docs/images/page-designer-settings.png"
+            }
+        }
+    }
+}
