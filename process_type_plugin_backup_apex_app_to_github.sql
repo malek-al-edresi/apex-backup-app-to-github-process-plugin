@@ -36,7 +36,7 @@ prompt APPLICATION 105 - Medical Center System
 -- Application Export:
 --   Application:     105
 --   Name:            Medical Center System
---   Date and Time:   14:30 Wednesday July 22, 2026
+--   Date and Time:   22:42 Friday July 24, 2026
 --   Exported By:     MEDICAL_CENTER_SYSTEM
 --   Flashback:       0
 --   Export Type:     Component Export
@@ -296,53 +296,11 @@ unistr('    -- J. Check HTTP status code \2013 raise error if not 200 or 201'),
 ''))
 ,p_api_version=>3
 ,p_execution_function=>'backup_apex_app_to_github'
-,p_version_scn=>'SH256:2hLqNv5fvuC_eDUr64SPRFV-AR7x_LvlIXknSDHQ7ik'
-,p_help_text=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'OVERVIEW',
-'Exports an APEX application as a SQL file and uploads (create/update) to GitHub via REST API.',
-'Author: Eng. Malek M. Al-Edresi.',
-'',
-'PREREQUISITES (DBA required)',
-'1. GitHub token with ''repo'' scope (classic token, contents:write).',
-'2. Network ACL allowing outbound HTTPS to api.github.com:443.',
-'3. Target repository must exist.',
-'',
-'ATTRIBUTES (6 fields)',
-'1. Application ID (Number, Required) - The APEX app ID to export.',
-'2. GitHub Token (Password, Required) - Your personal access token.',
-'3. Repository Owner (Text, Required) - Username or organization.',
-'4. Repository Name (Text, Required) - Exact repo name.',
-'5. Branch (Text, Optional) - Target branch. Default: ''main''.',
-'6. File Path (Text, Optional) - Path/filename in repo. Default: ''apex/app_#APP_ID#_latest.sql''. Supports #APP_ID# substitution.',
-'',
-'SETUP',
-'1. In Page Designer, add a new Process.',
-unistr('2. Set Type = ''Plug-in'' \2192 choose ''Backup APEX App to GitHub''.'),
-'3. Fill all 6 attributes as above.',
-'4. Configure Server-side Condition if needed (e.g., on button click).',
-'',
-'BEHAVIOR',
-'- Success: Shows message with direct GitHub link to the file.',
-'- Fail: Raises an exception with the exact error (invalid token, missing app, network, etc.).',
-'- Debug: Enable APEX Debug Mode to see detailed logs (token masked, status codes, response).',
-'',
-'TROUBLESHOOTING & ERRORS',
-'- "HTTP 404" (file not found): File must exist. Create a placeholder file first or adjust version.',
-'- "HTTP 401" (unauthorized): Token invalid or expired. Regenerate with ''repo'' scope.',
-'- "HTTP 403" (forbidden): Token missing permissions or repo access. Check token scopes.',
-unistr('- "ORA-29273" (network failure): ACL missing or proxy issue \2013 contact DBA.'),
-'- "Application X not found": Verify the App ID exists in current workspace.',
-'',
-'SECURITY',
-'- Token is stored as a password field (masked in UI and logs).',
-'- Debug logs only show first 4 characters of token.',
-'- Never share screenshots containing the full token.',
-'',
-'NOTES',
-'- Supports large applications via chunked Base64 encoding.',
-'- Works with private repositories if token has access.',
-unistr('- Does NOT require file system access \2013 only REST API calls.')))
+,p_version_scn=>'SH256:AJ446Q9hN4tGAWITCUVq1TtvXHAi3MuKWtC5OYEMeJQ'
+,p_help_text=>'Backup APEX App to GitHub is an Oracle APEX Process Plugin that automatically exports an APEX application as a SQL file and uploads it to a GitHub repository using the GitHub REST API. It supports creating or updating files, private repositories, con'
+||unistr('figurable branches and file paths, secure token handling, and detailed error reporting\2014making it ideal for version control, backups, and CI/CD workflows. Developed by Eng. Malek M. Al-Edresi (Oracle ACE Associate).')
 ,p_version_identifier=>'1.0'
+,p_about_url=>'https://github.com/malek-al-edresi/apex-backup-app-to-github-process-plugin'
 ,p_plugin_comment=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'Author: Eng. Malek M. Al-Edresi (Oracle ACE Associate) ',
 'Backup APEX app to GitHub via REST API. ',
