@@ -36,7 +36,7 @@ prompt APPLICATION 105 - Medical Center System
 -- Application Export:
 --   Application:     105
 --   Name:            Medical Center System
---   Date and Time:   22:42 Friday July 24, 2026
+--   Date and Time:   00:02 Saturday July 25, 2026
 --   Exported By:     MEDICAL_CENTER_SYSTEM
 --   Flashback:       0
 --   Export Type:     Component Export
@@ -66,7 +66,7 @@ wwv_flow_imp_shared.create_plugin(
 '-- PLUGIN NAME      : Backup APEX Application to GitHub',
 '-- INTERNAL NAME    : BACKUP_APEX_APP_TO_GITHUB',
 '-- BY               : Malek M. Al-Edresi (Oracle ACE Associate)',
-'-- ON DATE          : 2026-07-18 (Final)',
+'-- ON DATE          : 2026-07-18 (Final - Using Attributes API)',
 '-- TYPE             : Process Plugin',
 '-- DESCRIPTION      : Exports an APEX application as a SQL file and',
 '--                    uploads it to a GitHub repository via the REST API.',
@@ -79,14 +79,14 @@ wwv_flow_imp_shared.create_plugin(
 ') IS',
 '',
 '    -- ==================================================================',
-unistr('    -- A. Retrieve plugin attributes (mapped to custom attributes 01\201306)'),
+'    -- A. Retrieve plugin attributes using Static ID (modern method)',
 '    -- ==================================================================',
-'    l_app_id        NUMBER         := p_process.attribute_01;          -- Application ID',
-'    l_github_token  VARCHAR2(4000) := p_process.attribute_02;          -- GitHub token',
-'    l_repo_owner    VARCHAR2(200)  := p_process.attribute_03;          -- Owner',
-'    l_repo_name     VARCHAR2(200)  := p_process.attribute_04;          -- Repo name',
-'    l_branch        VARCHAR2(50)   := NVL(p_process.attribute_05, ''main''); -- Branch, default ''main''',
-'    l_file_path     VARCHAR2(200)  := p_process.attribute_06;          -- Optional file path',
+'    l_app_id        NUMBER := p_process.attributes.get_number(''application_id'');',
+'    l_github_token  VARCHAR2(4000) := p_process.attributes.get_varchar2(''github_token'');',
+'    l_repo_owner    VARCHAR2(200)  := p_process.attributes.get_varchar2(''repository_owner'');',
+'    l_repo_name     VARCHAR2(200)  := p_process.attributes.get_varchar2(''repository_name'');',
+'    l_branch        VARCHAR2(50)   := NVL(p_process.attributes.get_varchar2(''branch''), ''main'');',
+'    l_file_path     VARCHAR2(200)  := p_process.attributes.get_varchar2(''file_path'');',
 '',
 '    -- ==================================================================',
 '    -- B. Internal variables and helper function',
@@ -143,7 +143,6 @@ unistr('        -- Any other HTTP error \2192 raise exception'),
 '            RAISE_APPLICATION_ERROR(-20002, ''Cannot check existing file: '' || l_error_msg);',
 '        END IF;',
 '    EXCEPTION',
-unistr('        -- Unexpected errors (network, ACL, etc.) \2013 propagate them, don''t swallow.'),
 '        WHEN OTHERS THEN',
 '            RAISE;',
 '    END get_github_sha;',
@@ -172,7 +171,7 @@ unistr('        -- Unexpected errors (network, ACL, etc.) \2013 propagate them, 
 '        l_final_file_path := l_file_path;',
 '    END IF;',
 '',
-unistr('    -- Log start (masking token for security) \2013 use session debug flag'),
+'    -- Log start (masking token for security)',
 '    IF apex_application.g_debug THEN',
 '        apex_debug.info(''Backup APEX App: Starting for app %s'', l_app_id);',
 '        apex_debug.info(''Repo: %s, branch: %s, file: %s'', l_full_repo, l_branch, l_final_file_path);',
@@ -278,7 +277,16 @@ unistr('    -- J. Check HTTP status code \2013 raise error if not 200 or 201'),
 '        ''Application '' || l_app_id || '' backed up to '' ||',
 '        l_full_repo || ''/blob/'' || l_branch || ''/'' || l_final_file_path || ',
 '        '' (commit pending)'';',
+'        ',
+'    apex_json.initialize_clob_output;',
+'    apex_json.open_object;',
+'    apex_json.write(''success'', true);',
+'    apex_json.write(''message'', p_result.success_message);',
+'    apex_json.close_object;',
 '',
+'    htp.p(apex_json.get_clob_output);',
+'    apex_json.free_output;',
+'    ',
 '    IF apex_application.g_debug THEN',
 '        apex_debug.info(''Backup completed successfully for app %s'', l_app_id);',
 '    END IF;',
@@ -296,7 +304,7 @@ unistr('    -- J. Check HTTP status code \2013 raise error if not 200 or 201'),
 ''))
 ,p_api_version=>3
 ,p_execution_function=>'backup_apex_app_to_github'
-,p_version_scn=>'SH256:AJ446Q9hN4tGAWITCUVq1TtvXHAi3MuKWtC5OYEMeJQ'
+,p_version_scn=>'SH256:4_BRo_5khylyZ57hc0zgtouCdy4VcxMVKgICWgrFDmU'
 ,p_help_text=>'Backup APEX App to GitHub is an Oracle APEX Process Plugin that automatically exports an APEX application as a SQL file and uploads it to a GitHub repository using the GitHub REST API. It supports creating or updating files, private repositories, con'
 ||unistr('figurable branches and file paths, secure token handling, and detailed error reporting\2014making it ideal for version control, backups, and CI/CD workflows. Developed by Eng. Malek M. Al-Edresi (Oracle ACE Associate).')
 ,p_version_identifier=>'1.0'
@@ -319,7 +327,6 @@ wwv_flow_imp_shared.create_plugin_attribute(
 ,p_apexlang_name=>'applicationId'
 ,p_attribute_type=>'NUMBER'
 ,p_is_required=>true
-,p_default_value=>':APP_ID'
 ,p_is_translatable=>false
 ,p_examples=>'100'
 ,p_help_text=>'The numeric ID of the APEX application you want to back up. Found in the application''s "Shared Components" or the URL.'
@@ -349,7 +356,7 @@ wwv_flow_imp_shared.create_plugin_attribute(
 ,p_prompt=>'File Path'
 ,p_apexlang_name=>'filePath'
 ,p_attribute_type=>'TEXT'
-,p_is_required=>true
+,p_is_required=>false
 ,p_is_translatable=>false
 ,p_examples=>'backups/app_100.sql'
 ,p_help_text=>'Optional custom path/filename within the repository. If left blank, the plugin uses apex/app_#APP_ID#_latest.sql. You may include substitution strings like #APP_ID#.'

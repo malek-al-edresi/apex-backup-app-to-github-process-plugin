@@ -50,7 +50,7 @@
             "plugin": {
                 "internalName": "BACKUP_APEX_APP_TO_GITHUB",
                 "type": "process",
-                "demo": "",
+                "demo": "https://oracleapex.com/ords/r/app_navification/apex-github-export-demo/home?session=9500304855910",
                 "previewImage": "https://raw.githubusercontent.com/eng-malek/apex-backup-app-to-github-process-plugin/main/docs/images/page-designer-settings.png"
             }
         }
