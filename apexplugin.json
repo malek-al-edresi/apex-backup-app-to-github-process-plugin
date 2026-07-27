@@ -17,9 +17,9 @@
         "rest api",
         "automation"
     ],
-    "homepage": "https://github.com/eng-malek/apex-backup-app-to-github-process-plugin",
+    "homepage": "https://github.com/malek-al-edresi/apex-backup-app-to-github-process-plugin",
     "bugs": {
-        "url": "https://github.com/eng-malek/apex-backup-app-to-github-process-plugin/issues",
+        "url": "https://github.com/malek-al-edresi/apex-backup-app-to-github-process-plugin/issues",
         "email": "malek.m.edresi@gmail.com"
     },
     "license": "Apache-2.0",
@@ -27,12 +27,12 @@
     "author": {
         "name": "Malek Mohammed Al-Edresi",
         "email": "malek.m.edresi@gmail.com",
-        "url": "https://github.com/eng-malek",
+        "url": "https://github.com/malek-al-edresi",
         "donationUrl": "https://buymeacoffee.com/malek_al_edresi"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/eng-malek/apex-backup-app-to-github-process-plugin.git"
+        "url": "https://github.com/malek-al-edresi/apex-backup-app-to-github-process-plugin.git"
     },
     "oracle": {
         "versions": [
